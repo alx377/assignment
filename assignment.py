@@ -4,8 +4,7 @@ import re
 import json
 import csv
 
-import matplotlib.pyplot as plt
-import numpy as np
+
 
 def get_chat_count():
     # Argument parsing stuff
@@ -85,6 +84,8 @@ def get_chat_count():
 
     # If the --graph flag was on show bar graphs of the hourly user counts.
     if args.graph:
+        import matplotlib.pyplot as plt
+        import numpy as np
         for day in top_three_days:
             user_counts = [d["user_count"] for d in day["hourly"]]
             hours = [str(d["hour_of_day"])+":00" for d in day["hourly"]]
