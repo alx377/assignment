@@ -41,11 +41,11 @@ def get_chat_count():
     headers = {"Authorization": "Token "+token}
 
     # Send the get request and parse it
-    try:
-        res = requests.get(api_url, headers=headers)
-        res = json.loads(res.text)
-    except:
-        print("Problem getting data from API.")
+    res = requests.get(api_url, headers=headers)
+    if res.status_code != 200:
+        print("Problem getting data from API. Check the given acces token.")
+        return    
+    res = json.loads(res.text)
     
     # Get the top three days.
     results = []
@@ -58,11 +58,11 @@ def get_chat_count():
     top_three_days = []
     for entry in results:
         second_api_url = "https://api.giosg.com/api/reporting/v1/rooms/84e0fefa-5675-11e7-a349-00163efdd8db/user-presence-counts/?start_date="+entry[0]+"&end_date="+entry[0]
-        try:
-            res = requests.get(second_api_url, headers=headers)
-            res = json.loads(res.text)
-        except:
-            print("Problem getting hourly data from API.")
+        res = requests.get(second_api_url, headers=headers)
+        if res.status_code != 200:
+            print("Problem getting data from API. Check the given acces token.")
+            return  
+        res = json.loads(res.text)
         top_three_days.append(res)
     
     # Print out the results
