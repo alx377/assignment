@@ -18,8 +18,8 @@ def get_chat_count():
     parser.add_argument("--csv", dest="csv", action="store_true", default=False,
                         help="Add this flag to export .csv file of the results.")
     parser.add_argument("--graph", dest="graph", action="store_true", default=False,
-                        help="Add this flag to see graphs of the results.")     
-                    
+                        help="Add this flag to see graphs of the results.")
+
     args = parser.parse_args()
 
     # Store arguments
@@ -44,9 +44,9 @@ def get_chat_count():
     res = requests.get(api_url, headers=headers)
     if res.status_code != 200:
         print("Problem getting data from API. Check the given acces token.")
-        return    
+        return
     res = json.loads(res.text)
-    
+
     # Get the top three days.
     results = []
     for entry in res["by_date"]:
@@ -61,13 +61,13 @@ def get_chat_count():
         res = requests.get(second_api_url, headers=headers)
         if res.status_code != 200:
             print("Problem getting data from API. Check the given acces token.")
-            return  
+            return
         res = json.loads(res.text)
         top_three_days.append(res)
-    
+
     # Print out the results
-    for day in top_three_days:
-        print("On "+day["start_date"]+" there were "+str(len(day["hourly"]))+" chats.\n-----------------")
+    for idx, day in enumerate(top_three_days):
+        print("On "+day["start_date"]+" there were "+str(results[idx][1])+" chats.\n-----------------")
         for hour in day["hourly"]:
             print(str(hour["hour_of_day"])+":00 there was "+str(hour["user_count"])+" users present")
         print("\n")
@@ -94,7 +94,7 @@ def get_chat_count():
             plt.xticks(y_pos, hours, rotation='vertical')
             plt.ylabel("User count")
             plt.title("User count by hour on "+day["start_date"])
-            
+
             plt.show()
 
 if __name__ == "__main__":
